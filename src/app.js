@@ -1,7 +1,7 @@
 define([
-    'angular', 'bz'
+    'angular', 'bz', 'angular-route'
 ], function(angular) {
     'use strict';
 
-    return angular.module('bz.seo', ['bz']);
+    return angular.module('bz.seo', ['bz', 'ngRoute']);
 });

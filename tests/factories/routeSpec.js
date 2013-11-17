@@ -15,9 +15,9 @@ define(['angular', 'angular-mocks', 'bz.seo/factories/route'], function (angular
             httpBackend.verifyNoOutstandingRequest();
         });
 
-        it('should be defined', inject(['bz.pages.factories.page', function (PageResource) {
-            var pagesData = PageResource.get();
-            httpBackend.expectGET('/api/v1/pages');
+        it('should be defined', inject(['bz.seo.factories.route', function (RouteResource) {
+            var pagesData = RouteResource.get();
+            httpBackend.expectGET('/api/v1/seo/routes');
             scope.$apply();
             httpBackend.flush();
             expect(pagesData.data).toEqual([]);

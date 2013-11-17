@@ -14,7 +14,7 @@ require.config({
     baseUrl: '/base/src',
 
     packages: [{
-        name: 'bz.pages',
+        name: 'bz.seo',
         location: '../src',
         main: 'config'
     }],
@@ -22,6 +22,7 @@ require.config({
     paths: {
         'angular': '../bower_components/angular/angular',
         'angular-mocks': '../bower_components/angular-mocks/angular-mocks',
+        'angular-route': '../bower_components/angular-route/angular-route',
 
         'bz': '../bower_components/bazalt/build/bz'
     },
@@ -29,6 +30,7 @@ require.config({
     shim: {
         'angular': { exports: 'angular' },
         'angular-mocks': { deps: ['angular'], exports: 'mocks' },
+        'angular-route': { deps: ['angular'] },
 
         'bz': { deps: ['angular'] }
     },

@@ -9,13 +9,15 @@ requirejs.config({
 
         // angular
         'angular': '../bower_components/angular/angular',
+        'angular-route': '../bower_components/angular-route/angular-route',
 
         // tests
         'jasmine': '../bower_components/jasmine/lib/jasmine-core'
     },
     shim: {
         'angular': { exports: 'angular' },
-        'bz': { deps: ['angular'] }
+        'bz': { deps: ['angular'] },
+        'angular-route': { deps: ['angular'] }
     },
     priority: [
         'angular'

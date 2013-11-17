@@ -1,10 +1,10 @@
 (function () {
 define('bz.seo/app',[
-    'angular', 'bz'
+    'angular', 'bz', 'angular-route'
 ], function(angular) {
     'use strict';
 
-    return angular.module('bz.seo', ['bz']);
+    return angular.module('bz.seo', ['bz', 'ngRoute']);
 });
 define('bz.seo/factories/route',[
     'bz.seo/app'
@@ -30,38 +30,46 @@ define('bz.seo',[
         window.prerenderReady = false;
     }]);
 
-    app.run(['$rootScope', '$location', '$route', 'bz.seo.factories.route', '$rootElement',
-        function ($rootScope, $location, $route, RouteFactory, $rootElement) {
-
-            var head = $rootElement.find('head');
+    app.run(['$rootScope', '$location', '$route', 'bz.seo.factories.route', '$document',
+        function ($rootScope, $location, $route, RouteFactory, $document) {
+            var head = $document.find('head');
             if (!head.length) {
-                title = angular.element(document.createElement('title'));
-                $rootElement.find('head').append(metaKeywords);
+                head = angular.element(document.createElement('head'));
+                $document.append(head);
             }
-            var title = angular.element(head.find('title')[0])
-            metaKeywords = angular.element(head.find('meta[name=keywords]')[0]),
-                metaDesc = angular.element(head.find('meta[name=description]')[0]);
+            var title = angular.element(head.find('title')[0]),
+            metaKeywords = null,
+                metaDesc = null;
 
+            angular.forEach(head.find('meta'), function(meta){
+                var el = angular.element(meta);
+                if (el.attr('name') == 'keywords') {
+                    metaKeywords = el;
+                }
+                if (el.attr('name') == 'description') {
+                    metaDesc = el;
+                }
+            });
 
             // create description meta tag if it not exists
-            if (!metaDesc.length) {
+            if (!metaDesc) {
                 metaDesc = angular.element(document.createElement('meta'))
                     .attr('name', 'description')
                     .attr('content', '');
-                $rootElement.find('head').prepend(metaDesc);
+                head.append(metaDesc);
             }
             // create keyword meta tag if it not exists
-            if (!metaKeywords.length) {
+            if (!metaKeywords) {
                 metaKeywords = angular.element(document.createElement('meta'))
                     .attr('name', 'keywords')
                     .attr('content', '');
-                $rootElement.find('head').prepend(metaKeywords);
+                head.append(metaKeywords);
             }
 
             // create title tag if it not exists
             if (!title.length) {
                 title = angular.element(document.createElement('title'));
-                $rootElement.find('head').prepend(title);
+                head.append(title);
             }
 
             var currentRoute = null;
