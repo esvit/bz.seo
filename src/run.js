@@ -9,8 +9,8 @@ define([
         window.prerenderReady = false;
     }]);
 
-    app.run(['$rootScope', '$location', '$route', 'bz.seo.factories.route', '$document',
-        function ($rootScope, $location, $route, RouteFactory, $document) {
+    app.run(['$rootScope', '$location', '$route', 'bz.seo.factories.route', '$document', '$log',
+        function ($rootScope, $location, $route, RouteFactory, $document, $log) {
             var head = $document.find('head');
             if (!head.length) {
                 head = angular.element(document.createElement('head'));
@@ -53,17 +53,20 @@ define([
 
             var currentRoute = null;
             $rootScope.$on('$routeChangeSuccess', function (e) {
-                window.prerenderReady = true;
-
                 var route = { 'url': $location.path(), 'route': $route.current.$$route.segment };
                 if (!angular.equals(route, currentRoute)) { // disable double request
                     currentRoute = route;
                     RouteFactory.get(route, function (res) {
+                        window.prerenderReady = true;
+
+                        $log.debug('bz.seo: Changes meta information', res);
                         $rootScope.$meta = res;
                         title.html(res.title || '');
                         metaKeywords.attr('content', res.keywords || '');
                         metaDesc.attr('content', res.description || '');
                     });
+                } else {
+                    window.prerenderReady = true;
                 }
             });
 
