@@ -93,6 +93,24 @@ define([
                 metaImage.attr('href', value);
                 service.tags['image_src'] = value;
                 return service;
+            },
+            notFound: function() {
+                var statusCode = angular.element(document.createElement('meta'))
+                    .attr('name', 'prerender-status-code')
+                    .attr('content', '404');
+                head.append(statusCode);
+                window.prerenderReady = true;
+            },
+            redirectTo: function(link) {
+                var statusCode = angular.element(document.createElement('meta'))
+                    .attr('name', 'prerender-status-code')
+                    .attr('content', '302');
+                head.append(statusCode);
+                var header = angular.element(document.createElement('meta'))
+                    .attr('name', 'prerender-header')
+                    .attr('content', 'Location: ' + link);
+                head.append(header);
+                window.prerenderReady = true;
             }
         };
         return service;

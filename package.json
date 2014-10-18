@@ -15,7 +15,7 @@
     "karma-ng-html2js-preprocessor": "*",
     "coveralls": "",
     "karma-coverage": "~0.1.0",
-    "karma-requirejs": "~0.1.0"
+    "karma-requirejs": "~0.2.0"
   },
   "scripts": {
     "test": "karma start --single-run --no-auto-watch"

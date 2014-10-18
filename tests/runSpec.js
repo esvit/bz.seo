@@ -81,6 +81,55 @@ define(['angular', 'bz.seo/run'], function(angular, app) {
             //expect(metaDesc.attr('content')).toEqual('This is just test');
             //expect(window.prerenderReady).toEqual(true);
         }]));
+
+
+        it("test notFound", inject(['$rootScope', '$document', 'bzSeoMeta', function($rootScope, $document, bzSeoMeta) {
+
+            bzSeoMeta.notFound();
+
+            var head = $document.find('head'),
+                meta = head.find('meta'),
+                statusCode = null;
+
+            angular.forEach(head.find('meta'), function(meta){
+                var el = angular.element(meta);
+                if (el.attr('name') == 'prerender-status-code') {
+                    statusCode = el;
+                }
+            });
+
+            expect(statusCode.length).toEqual(1);
+            expect(statusCode.attr('content')).toEqual('404');
+            expect(window.prerenderReady).toEqual(true);
+        }]));
+
+
+        it("test redirectTo", inject(['$rootScope', '$document', 'bzSeoMeta', function($rootScope, $document, bzSeoMeta) {
+
+            bzSeoMeta.redirectTo('http://google.com/');
+
+            var head = $document.find('head'),
+                meta = head.find('meta'),
+                statusCode = null,
+                header = null;
+
+            angular.forEach(head.find('meta'), function(meta){
+                var el = angular.element(meta);
+                if (el.attr('name') == 'prerender-status-code') {
+                    statusCode = el;
+                }
+                if (el.attr('name') == 'prerender-header') {
+                    header = el;
+                }
+            });
+
+            expect(statusCode.length).toEqual(1);
+            expect(statusCode.attr('content')).toEqual('302');
+            expect(header.length).toEqual(1);
+            expect(header.attr('content')).toEqual('Location: http://google.com/');
+            expect(window.prerenderReady).toEqual(true);
+        }]));
     });
+
 
 });
